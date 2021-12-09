@@ -123,7 +123,7 @@ public class Species {
 			Genome child = null;
 			
 			if(parentA.getId() == parentB.getId()) {
-				child = new Genome(parentA.getNeurons(), parentA.getConnections());
+				child = parentA.clone();
 			} else if(parentA.getFitness() > parentB.getFitness()) {
 				child = parentA.crossover(parentB);
 			} else {

@@ -24,7 +24,7 @@ public class Pipe {
 		this.uuid = UUID.randomUUID().toString();
 		this.ctx = ctx;
 //		float y = RandomUtil.getRandomNumberBetween(gap, (float) ctx.height - 2*gap);
-		float y = RandomUtil.getRandomNumberBetween((ctx.height / 100 ) * 25, (float) ctx.height - ((ctx.height / 100 ) * 25));
+		float y = RandomUtil.getRandomNumberBetween((ctx.height / 100 ) * 10, (float) ctx.height - ((ctx.height / 100 ) * 30));
 		this.pos = new PVector(ctx.width, y);
 	}
 	

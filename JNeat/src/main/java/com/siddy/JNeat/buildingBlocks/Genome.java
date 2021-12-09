@@ -49,40 +49,17 @@ public class Genome implements Serializable{
 		initialize();
 	}
 
-	public Genome(Map<Long, Neuron> neurons2, List<Connection> connections2) {
+	private Genome(Genome genome) {
 		this.id = JNeat.INSTANCE.getNewGenomeId();
 		
-		neurons = new HashMap<Long, Neuron>();
-		connections = new ArrayList<Connection>();
+		neurons = genome.getNeurons()
+				.values()
+				.stream()
+				.collect(Collectors.toMap(Neuron::getId, Neuron::clone));
 		
-		neurons2.values()
-		.stream()
-		.forEach(neuronToClone -> {
-			neurons.put(neuronToClone.getId(), new Neuron(neuronToClone));
-		});
-		
-		connections = connections2.stream()
-				.map(connectionToClone -> new Connection(connectionToClone))
-				.collect(Collectors.toList());
-	}
-
-	public Genome(Genome genome) {
-		this.id = genome.getId();
-		
-		neurons = new HashMap<Long, Neuron>();
-		connections = new ArrayList<Connection>();
-		
-		Map<Long, Neuron> neurons2 = genome.getNeurons();
-		List<Connection> connections2 = genome.getConnections();
-		
-		neurons2.values()
-		.stream()
-		.forEach(neuronToClone -> {
-			neurons.put(neuronToClone.getId(), new Neuron(neuronToClone));
-		});
-		
-		connections = connections2.stream()
-				.map(connectionToClone -> new Connection(connectionToClone))
+		connections = genome.getConnections()
+				.stream()
+				.map(Connection::clone)
 				.collect(Collectors.toList());
 	}
 	
@@ -155,8 +132,8 @@ public class Genome implements Serializable{
 				// Process incoming connections (Hidden and Output as only these have incoming connections)
 				double sum = connections.stream()
 						.filter(connection -> connection.isEnabled() && (connection.getOutputNeuronId() == neuron.getId()))
-						.map(Connection::getData)
-						.reduce(0.0, (partialSum, data) -> partialSum + data);
+						.mapToDouble(Connection::getData)
+						.sum();
 				
 				neuron.feedData(sum);
 			}
@@ -206,7 +183,7 @@ public class Genome implements Serializable{
 		connections.stream()
 		.forEach(connection -> {
 			if (linkWeightMutationRate > getRandomFloat()) {
-				connection.setWeight(connection.getWeight() + (getRandomNumberBetween(-1.0f, 1.0f) / 10));;
+				connection.setWeight(connection.getWeight() + (getRandomNumberBetween(-0.1f, 0.1f)));
 			}
 		});
 	}
@@ -305,7 +282,7 @@ public class Genome implements Serializable{
 	
 	// Assuming the current genome is most fit and other is second
 	public Genome crossover(Genome other) {
-		Genome child = new Genome(neurons, connections);
+		Genome child = clone();
 		
 		for(Connection parent1Connection : this.getConnections()) {
 			for(Connection parent2Connection : other.getConnections()) {
@@ -415,5 +392,9 @@ public class Genome implements Serializable{
 			ctx.popMatrix();
 		});
 		ctx.stroke(0);
+	}
+	
+	public Genome clone() {
+		return new Genome(this);
 	}
 }

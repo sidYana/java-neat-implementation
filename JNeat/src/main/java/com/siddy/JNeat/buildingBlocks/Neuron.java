@@ -27,7 +27,7 @@ public class Neuron implements Serializable {
 		}
 	}
 
-	public Neuron(Neuron neuronToClone) {
+	private Neuron(Neuron neuronToClone) {
 		this(neuronToClone.getId(), neuronToClone.getType());
 	}
 
@@ -75,6 +75,10 @@ public class Neuron implements Serializable {
 		return isBias() ? bias : value;
 	}
 
+	public Neuron clone() {
+		return new Neuron(this);
+	}
+	
 	@Override
 	public String toString() {
 		return "Neuron [id=" + id + ", value=" + value + ", type=" + type + ", activationFunction=" + activationFunction

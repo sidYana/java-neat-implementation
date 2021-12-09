@@ -31,7 +31,7 @@ public class Connection implements Serializable{
 		this.weight = weight;
 	}
 	
-	public Connection(Connection connectionToClone) {
+	private Connection(Connection connectionToClone) {
 		this.innovationNumber = connectionToClone.getInnovationNumber();
 		this.inputNeuronId = connectionToClone.getInputNeuronId();
 		this.outputNeuronId = connectionToClone.getOutputNeuronId();
@@ -99,5 +99,9 @@ public class Connection implements Serializable{
 		return "Connection [innovationNumber=" + innovationNumber + ", inputNeuronId=" + inputNeuronId
 				+ ", outputNeuronId=" + outputNeuronId + ", weight=" + weight + ", data=" + data + ", enabled="
 				+ enabled + "]";
+	}
+	
+	public Connection clone() {
+		return new Connection(this);
 	}
 }
