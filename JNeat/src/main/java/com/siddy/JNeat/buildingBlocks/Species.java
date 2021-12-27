@@ -36,15 +36,11 @@ public class Species {
 		this.representative = newGenome;
 	}
 	
-	public boolean addToSpecies(Genome newGenome) {
-		if (belongs(newGenome)) {
-			population.add(newGenome);
-			return true;
-		}
-		return false;
+	public void addToSpecies(Genome newGenome) {
+		population.add(newGenome);
 	}
 	
-	private boolean belongs(Genome genome) {
+	public boolean belongs(Genome genome) {
 		int excessAndDisjointNodes = 0;
 		float avgWeightDiff = 0.0f;
 		float totalWeightDiff = 0.0f;

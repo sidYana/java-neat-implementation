@@ -66,9 +66,11 @@ public class JNeat {
 
 	private void assignSpecies(Genome genome) {
 		speciesList.stream()
-		.filter(species -> species.addToSpecies(genome))
+		.filter(s -> s.belongs(genome))
 		.findFirst()
-		.ifPresentOrElse(species -> {}, () -> {
+		.ifPresentOrElse(species -> {
+			species.addToSpecies(genome);
+		}, () -> {
 			speciesList.add(new Species(speciesId++, genome));
 		});
 	}
